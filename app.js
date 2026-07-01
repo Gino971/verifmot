@@ -161,20 +161,24 @@ async function verifyWord() {
 
   const normalized = normalizeWord(value);
   const isValid = state.set.has(normalized);
+  const anagrams = findAnagrams(value);
 
   if (isValid) {
-    elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br><span class="result-unknown">Recherche des synonymes...</span>`;
+    const anagramLine = anagrams.length
+      ? `<br>Anagrammes: ${escapeHtml(anagrams.join(", "))}`
+      : "<br><span class=\"result-unknown\">Aucune anagramme trouvee.</span>";
+
+    elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span>${anagramLine}<br><span class="result-unknown">Recherche des synonymes...</span>`;
 
     const synonyms = await fetchSynonyms(value);
     if (requestId !== state.verifyRequestId) return;
 
     if (synonyms.length) {
-      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br>Synonymes: ${escapeHtml(synonyms.join(", "))}`;
+      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span>${anagramLine}<br>Synonymes: ${escapeHtml(synonyms.join(", "))}`;
     } else {
-      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br><span class="result-unknown">Aucun synonyme trouve.</span>`;
+      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span>${anagramLine}<br><span class="result-unknown">Aucun synonyme trouve.</span>`;
     }
   } else {
-    const anagrams = findAnagrams(value);
     if (anagrams.length) {
       elements.verifyResult.innerHTML = `<span class="result-bad">${escapeHtml(value.toUpperCase())} est invalide.</span><br>Anagrammes: ${escapeHtml(anagrams.join(", "))}`;
     } else {
