@@ -42,7 +42,6 @@ body {
   padding-bottom: 30px;
 }
 
-.hero,
 .panel {
   background: var(--card);
   border: 1px solid var(--card-border);
@@ -52,33 +51,10 @@ body {
   backdrop-filter: blur(3px);
 }
 
-.hero {
-  padding: 18px 16px;
-}
-
-.eyebrow {
-  margin: 0;
-  color: var(--accent);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
 h1,
 h2 {
   margin: 0;
   font-family: "Space Grotesk", "Trebuchet MS", sans-serif;
-}
-
-h1 {
-  font-size: 1.65rem;
-  margin-top: 4px;
-}
-
-.subtitle {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 0.95rem;
 }
 
 .status-pill {
@@ -274,9 +250,14 @@ h1 {
     padding: 24px;
   }
 
-  .verify-row,
-  .actions-row {
+  .verify-row {
     grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .actions-row {
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
     align-items: center;
   }
 

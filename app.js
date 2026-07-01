@@ -18,6 +18,7 @@ const elements = {
   lettersContainer: document.getElementById("lettersContainer"),
   modeRow: document.getElementById("modeRow"),
   searchBtn: document.getElementById("searchBtn"),
+  resetBtn: document.getElementById("resetBtn"),
   moreBtn: document.getElementById("moreBtn"),
   moreInfo: document.getElementById("moreInfo"),
   searchResults: document.getElementById("searchResults")
@@ -45,6 +46,7 @@ function bindEvents() {
   });
 
   elements.searchBtn.addEventListener("click", searchWords);
+  elements.resetBtn.addEventListener("click", resetFields);
   elements.moreBtn.addEventListener("click", () => {
     state.visibleLimit = Math.min(state.allResults.length, state.visibleLimit + LOAD_MORE_STEP);
     renderResults();
@@ -320,7 +322,22 @@ function clearSearchOutput() {
   elements.searchResults.innerHTML = "";
 }
 
+function resetFields() {
+  elements.wordInput.value = "";
+  elements.verifyResult.innerHTML = "";
+  elements.lengthSelect.value = "all";
+  renderLetterBoxes();
+  clearSearchOutput();
+
+  for (const input of elements.lettersContainer.querySelectorAll(".letter-input")) {
+    input.value = "";
+  }
+
+  elements.wordInput.focus();
+}
+
 function setStatus(text, kind) {
+  if (!elements.status) return;
   elements.status.textContent = text;
   elements.status.className = `status-pill ${kind}`;
 }

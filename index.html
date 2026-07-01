@@ -15,13 +15,6 @@
 </head>
 <body>
   <main class="app-shell">
-    <header class="hero">
-      <p class="eyebrow">Jeux de lettres</p>
-      <h1>ODS9 Mots</h1>
-      <p class="subtitle">Verification instantanee, anagrammes et recherche avancee.</p>
-      <p id="odsLoadStatus" class="status-pill loading" aria-live="polite">Chargement du dictionnaire...</p>
-    </header>
-
     <section class="panel" aria-labelledby="verify-title">
       <h2 id="verify-title">Verifier un mot</h2>
       <div class="verify-row">
@@ -44,6 +37,7 @@
       </div>
       <div class="actions-row">
         <button id="searchBtn" class="btn" type="button">Rechercher</button>
+        <button id="resetBtn" class="btn btn-secondary" type="button">Reinitialiser</button>
         <button id="moreBtn" class="btn btn-secondary" type="button" hidden>+200</button>
       </div>
       <p id="moreInfo" class="small-note" aria-live="polite"></p>
