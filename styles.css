@@ -94,10 +94,20 @@ h2 {
   margin-bottom: 12px;
 }
 
-.verify-row,
-.actions-row {
+.verify-row {
   display: grid;
   gap: 10px;
+}
+
+.actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+#searchBtn {
+  flex: 1 1 auto;
 }
 
 .main-input,
@@ -276,9 +286,7 @@ h2 {
   }
 
   .actions-row {
-    grid-template-columns: repeat(3, auto);
-    justify-content: start;
-    align-items: center;
+    justify-content: flex-start;
   }
 
   .btn-icon {
