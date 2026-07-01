@@ -1,4 +1,4 @@
-const CACHE_NAME = "ods9-mobile-v1";
+const CACHE_NAME = "ods9-mobile-v2";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -29,11 +29,22 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  // Keep external requests untouched (fonts, CDNs, etc.).
+  if (new URL(event.request.url).origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse;
-      if (event.request.mode === "navigate") return caches.match("./index.html");
-      return fetch(event.request).catch(() => new Response("", { status: 404 }));
-    })
+    fetch(event.request)
+      .then((response) => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === "navigate") return caches.match("./index.html");
+          return new Response("", { status: 404 });
+        })
+      )
   );
 });
