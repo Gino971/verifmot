@@ -3,7 +3,8 @@ const state = {
   set: null,
   ready: false,
   visibleLimit: 0,
-  allResults: []
+  allResults: [],
+  verifyRequestId: 0
 };
 
 const INITIAL_LIMIT = 500;
@@ -145,7 +146,8 @@ async function loadODS() {
   }
 }
 
-function verifyWord() {
+async function verifyWord() {
+  const requestId = ++state.verifyRequestId;
   const value = (elements.wordInput.value || "").trim();
   if (!value) {
     elements.verifyResult.innerHTML = '<span class="result-unknown">Entrez un mot</span>';
@@ -161,7 +163,16 @@ function verifyWord() {
   const isValid = state.set.has(normalized);
 
   if (isValid) {
-    elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span>`;
+    elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br><span class="result-unknown">Recherche des synonymes...</span>`;
+
+    const synonyms = await fetchSynonyms(value);
+    if (requestId !== state.verifyRequestId) return;
+
+    if (synonyms.length) {
+      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br>Synonymes: ${escapeHtml(synonyms.join(", "))}`;
+    } else {
+      elements.verifyResult.innerHTML = `<span class="result-ok">${escapeHtml(value.toUpperCase())} est valide</span><br><span class="result-unknown">Aucun synonyme trouve.</span>`;
+    }
   } else {
     const anagrams = findAnagrams(value);
     if (anagrams.length) {
@@ -369,4 +380,43 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+async function fetchSynonyms(word) {
+  try {
+    const endpoint = `https://api.dictionaryapi.dev/api/v2/entries/fr/${encodeURIComponent(word.toLowerCase())}`;
+    const response = await fetch(endpoint);
+    if (!response.ok) return [];
+
+    const payload = await response.json();
+    if (!Array.isArray(payload)) return [];
+
+    const seen = new Set();
+    const synonyms = [];
+
+    for (const entry of payload) {
+      const meanings = Array.isArray(entry?.meanings) ? entry.meanings : [];
+      for (const meaning of meanings) {
+        const definitions = Array.isArray(meaning?.definitions) ? meaning.definitions : [];
+        for (const definition of definitions) {
+          const items = Array.isArray(definition?.synonyms) ? definition.synonyms : [];
+          for (const rawSynonym of items) {
+            const synonym = String(rawSynonym || "").trim();
+            if (!synonym) continue;
+
+            const key = normalizeWord(synonym);
+            if (seen.has(key)) continue;
+
+            seen.add(key);
+            synonyms.push(synonym);
+            if (synonyms.length >= 12) return synonyms;
+          }
+        }
+      }
+    }
+
+    return synonyms;
+  } catch {
+    return [];
+  }
 }
