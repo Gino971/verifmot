@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>ODS9 Mots</title>
+  <meta name="description" content="Verification de mots ODS9 et recherche multicriteres optimisee mobile.">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <p class="eyebrow">Jeux de lettres</p>
+      <h1>ODS9 Mots</h1>
+      <p class="subtitle">Verification instantanee, anagrammes et recherche avancee.</p>
+      <p id="odsLoadStatus" class="status-pill loading" aria-live="polite">Chargement du dictionnaire...</p>
+    </header>
+
+    <section class="panel" aria-labelledby="verify-title">
+      <h2 id="verify-title">Verifier un mot</h2>
+      <div class="verify-row">
+        <input id="wordInput" class="main-input" type="text" placeholder="Ex: JONQUILLE" maxlength="15" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button id="verifyBtn" class="btn btn-primary" type="button">Verifier</button>
+      </div>
+      <div id="verifyResult" class="result-box" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="search-title">
+      <h2 id="search-title">Recherche de mots</h2>
+      <div class="row-wrap">
+        <label for="lengthSelect">Longueur</label>
+        <select id="lengthSelect" class="select"></select>
+      </div>
+      <div id="lettersContainer" class="letters-grid" aria-label="Lettres du motif"></div>
+      <div class="mode-row" id="modeRow">
+        <label><input type="radio" name="searchMode" value="exact" checked> Position exacte</label>
+        <label><input type="radio" name="searchMode" value="anywhere"> N'importe ou</label>
+      </div>
+      <div class="actions-row">
+        <button id="searchBtn" class="btn" type="button">Rechercher</button>
+        <button id="moreBtn" class="btn btn-secondary" type="button" hidden>+200</button>
+      </div>
+      <p id="moreInfo" class="small-note" aria-live="polite"></p>
+      <div id="searchResults" class="search-results" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
