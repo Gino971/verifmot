@@ -146,6 +146,26 @@ h2 {
   background: linear-gradient(120deg, #7bdff2 0%, #90f1ef 100%);
 }
 
+.btn-icon {
+  width: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(123, 223, 242, 0.18);
+  color: var(--accent-2);
+  border-color: rgba(123, 223, 242, 0.45);
+}
+
+.btn-icon:hover,
+.btn-icon:focus-visible {
+  background: rgba(123, 223, 242, 0.28);
+}
+
 .result-box {
   min-height: 26px;
   margin-top: 10px;
@@ -261,7 +281,17 @@ h2 {
     align-items: center;
   }
 
+  .btn-icon {
+    width: 46px;
+    min-width: 46px;
+    min-height: 46px;
+  }
+
   .btn {
     padding: 0 16px;
+  }
+
+  .btn-icon {
+    padding: 0;
   }
 }
